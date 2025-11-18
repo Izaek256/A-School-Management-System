@@ -69,3 +69,4 @@ backend/staticfiles/
 backend/db.sqlite3
 backend/.env
 .*md
+frontend/README.md
