@@ -30,11 +30,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       try {
         await ref
-            .read(authProvider.notifier)
+            .read(authStateProvider.notifier)
             .login(_usernameController.text, _passwordController.text);
             
         // Check if login was successful
-        final authState = ref.read(authProvider);
+        final authState = ref.read(authStateProvider);
         if (authState.isAuthenticated) {
           // Navigate to dashboard
           if (mounted) {
@@ -53,7 +53,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
+    final authState = ref.watch(authStateProvider);
 
     return Scaffold(
       appBar: AppBar(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:frontend/models/notification.dart';
 import 'package:frontend/providers/notification_provider.dart';
 import 'package:frontend/widgets/buttons/primary_button.dart';
 import 'package:frontend/widgets/inputs/app_input.dart';
@@ -73,7 +71,7 @@ class NotificationsView extends ConsumerWidget {
                       ),
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                          backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                           child: Icon(
                             notification.icon,
                             color: Theme.of(context).primaryColor,

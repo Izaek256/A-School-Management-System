@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/models/announcement.dart';
 import 'package:frontend/repositories/announcement_repository.dart';
-import 'package:frontend/services/api_service.dart';
 import 'package:frontend/providers/api_service_provider.dart';
 
 final announcementRepositoryProvider = Provider<AnnouncementRepository>((ref) {

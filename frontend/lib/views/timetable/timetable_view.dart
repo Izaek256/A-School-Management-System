@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:frontend/widgets/buttons/primary_button.dart';
 import 'package:frontend/widgets/inputs/app_input.dart';
 
@@ -73,7 +72,7 @@ class TimetableView extends ConsumerWidget {
                 child: Column(
                   children: [
                     // Header row
-                    _buildHeaderRow(),
+                    _buildHeaderRow(context),
                     // Time slots
                     _buildTimeSlot('08:00 - 09:00', ['Math', 'English', 'Science', 'History', 'Art']),
                     const Divider(height: 1),
@@ -105,9 +104,9 @@ class TimetableView extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeaderRow() {
+  Widget _buildHeaderRow(BuildContext context) {
     return Container(
-      color: Theme.of(context).primaryColor.withOpacity(0.1),
+      color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
       child: const Row(
         children: [
           SizedBox(
@@ -182,7 +181,7 @@ class TimetableView extends ConsumerWidget {
             padding: const EdgeInsets.all(8),
             child: Center(child: Text(subject)),
           ),
-        )).toList(),
+        )),
       ],
     );
   }

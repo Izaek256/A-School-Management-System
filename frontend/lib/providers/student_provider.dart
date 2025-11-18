@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/models/student.dart';
 import 'package:frontend/repositories/student_repository.dart';
-import 'package:frontend/services/api_service.dart';
 import 'package:frontend/providers/api_service_provider.dart';
 
 final studentRepositoryProvider = Provider<StudentRepository>((ref) {

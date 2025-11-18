@@ -19,7 +19,7 @@ class AppTable extends StatelessWidget {
       child: DataTable(
         columnSpacing: 20,
         horizontalMargin: 20,
-        headingRowColor: MaterialStateProperty.all(Theme.of(context).primaryColor.withOpacity(0.1)),
+        headingRowColor: WidgetStateProperty.all(Theme.of(context).primaryColor.withValues(alpha: 0.1)),
         columns: headers.map((header) => DataColumn(
           label: Text(
             header,

@@ -7,7 +7,7 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
+    final authState = ref.watch(authStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -15,7 +15,7 @@ class DashboardScreen extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () {
-              ref.read(authProvider.notifier).logout();
+              ref.read(authStateProvider.notifier).logout();
               Navigator.pushReplacementNamed(context, '/login');
             },
             icon: const Icon(Icons.logout),
