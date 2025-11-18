@@ -1,0 +1,71 @@
+# ----------------------
+# Python / Django
+# ----------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+.env
+.env.*
+venv/
+*.log
+*.pot
+*.py[cod]
+*.swp
+
+# Django media / static
+media/
+staticfiles/
+*.mo
+
+# Django migrations (optional: include if you want to keep them in repo)
+# **/migrations/
+# **/migrations/*.py
+# **/migrations/*.pyc
+# __pycache__/migrations/
+
+# ----------------------
+# Flutter / Dart
+# ----------------------
+.dart_tool/
+.packages
+.pub-cache/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub/
+.idea/
+*.iml
+*.ipr
+*.iws
+*.lock
+*.log
+
+# Flutter generated
+/generated_plugin_registrant.dart
+
+# ----------------------
+# Node / Frontend (if using Vite/React)
+# ----------------------
+node_modules/
+dist/
+*.log
+*.env
+
+# ----------------------
+# OS / Editor
+# ----------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.vscode/
+*.code-workspace
+
+# ----------------------
+# Misc
+# ----------------------
+*.bak
+*.tmp
