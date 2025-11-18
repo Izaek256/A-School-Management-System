@@ -31,7 +31,7 @@ linter:
     always_declare_return_types: true
     
     # Avoid unused parameters
-    avoid_unused_parameters: true
+    # unused_element: true
     
     # Prefer const over final for declarations
     prefer_const_declarations: true
