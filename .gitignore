@@ -1,71 +1,71 @@
-# ----------------------
-# Python / Django
-# ----------------------
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.sqlite3
-*.db
-.env
-.env.*
-venv/
+# Django
 *.log
-*.pot
-*.py[cod]
-*.swp
-
-# Django media / static
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
 media/
 staticfiles/
-*.mo
 
-# Django migrations (optional: include if you want to keep them in repo)
-# **/migrations/
-# **/migrations/*.py
-# **/migrations/*.pyc
-# __pycache__/migrations/
-
-# ----------------------
-# Flutter / Dart
-# ----------------------
-.dart_tool/
-.packages
-.pub-cache/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 build/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub/
-.idea/
-*.iml
-*.ipr
-*.iws
-*.lock
-*.log
-
-# Flutter generated
-/generated_plugin_registrant.dart
-
-# ----------------------
-# Node / Frontend (if using Vite/React)
-# ----------------------
-node_modules/
+develop-eggs/
 dist/
-*.log
-*.env
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# ----------------------
-# OS / Editor
-# ----------------------
-.DS_Store
-Thumbs.db
+# Django migrations (except for initial ones)
+**/migrations/00*.py
+**/migrations/00*.pyc
+
+# IDE
+.idea/
+.vscode/
 *.swp
 *.swo
-*.vscode/
-*.code-workspace
+.env
+*.md
+*.sh
+*.bat
+*.exe
 
-# ----------------------
-# Misc
-# ----------------------
-*.bak
-*.tmp
+# OS
+.DS_Store
+Thumbs.db
+
+# Flutter
+**/*.g.dart
+**/*.freezed.dart
+/build/
+/flutter_launcher_icons-web-icon-default.png
+/flutter_launcher_icons-web-icon-maskable.png
+/.dart_tool/
+/.packages
+/pubspec.lock
+/pubspec_overrides.yaml
+
+# Docker
+.env
+.Dockerfile
+docker-compose.override.yml
+
+# Backend specific
+backend/media/
+backend/staticfiles/
+backend/db.sqlite3
+backend/.env
