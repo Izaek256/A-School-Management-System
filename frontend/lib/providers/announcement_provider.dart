@@ -18,26 +18,24 @@ final announcementProvider = FutureProvider.family<Announcement, String>((ref, i
   return await repository.getAnnouncementById(id);
 });
 
-class AnnouncementNotifier extends StateNotifier<AsyncValue<List<Announcement>>> {
-  final AnnouncementRepository _repository;
+class AnnouncementNotifier extends AsyncNotifier<List<Announcement>> {
+  late final AnnouncementRepository _repository;
 
-  AnnouncementNotifier(this._repository) : super(const AsyncValue.loading());
+  @override
+  Future<List<Announcement>> build() async {
+    _repository = ref.read(announcementRepositoryProvider);
+    return await _loadAnnouncements();
+  }
 
-  Future<void> loadAnnouncements() async {
-    state = const AsyncValue.loading();
-    try {
-      final announcements = await _repository.getAnnouncements();
-      state = AsyncValue.data(announcements);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+  Future<List<Announcement>> _loadAnnouncements() async {
+    return await _repository.getAnnouncements();
   }
 
   Future<Announcement> createAnnouncement(Map<String, dynamic> data) async {
     try {
       final announcement = await _repository.createAnnouncement(data);
       // Reload the list
-      await loadAnnouncements();
+      state = await AsyncValue.guard(() => _loadAnnouncements());
       return announcement;
     } catch (e) {
       rethrow;
@@ -48,7 +46,7 @@ class AnnouncementNotifier extends StateNotifier<AsyncValue<List<Announcement>>>
     try {
       final announcement = await _repository.updateAnnouncement(id, data);
       // Reload the list
-      await loadAnnouncements();
+      state = await AsyncValue.guard(() => _loadAnnouncements());
       return announcement;
     } catch (e) {
       rethrow;
@@ -59,14 +57,11 @@ class AnnouncementNotifier extends StateNotifier<AsyncValue<List<Announcement>>>
     try {
       await _repository.delete(id);
       // Reload the list
-      await loadAnnouncements();
+      state = await AsyncValue.guard(() => _loadAnnouncements());
     } catch (e) {
       rethrow;
     }
   }
 }
 
-final announcementNotifierProvider = StateNotifierProvider<AnnouncementNotifier, AsyncValue<List<Announcement>>>((ref) {
-  final repository = ref.watch(announcementRepositoryProvider);
-  return AnnouncementNotifier(repository);
-});
+final announcementNotifierProvider = AsyncNotifierProvider<AnnouncementNotifier, List<Announcement>>(AnnouncementNotifier.new);

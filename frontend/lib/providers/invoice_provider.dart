@@ -18,26 +18,24 @@ final invoiceProvider = FutureProvider.family<Invoice, String>((ref, id) async {
   return await repository.getInvoiceById(id);
 });
 
-class InvoiceNotifier extends StateNotifier<AsyncValue<List<Invoice>>> {
-  final InvoiceRepository _repository;
+class InvoiceNotifier extends AsyncNotifier<List<Invoice>> {
+  late final InvoiceRepository _repository;
 
-  InvoiceNotifier(this._repository) : super(const AsyncValue.loading());
+  @override
+  Future<List<Invoice>> build() async {
+    _repository = ref.read(invoiceRepositoryProvider);
+    return await _loadInvoices();
+  }
 
-  Future<void> loadInvoices() async {
-    state = const AsyncValue.loading();
-    try {
-      final invoices = await _repository.getInvoices();
-      state = AsyncValue.data(invoices);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+  Future<List<Invoice>> _loadInvoices() async {
+    return await _repository.getInvoices();
   }
 
   Future<Invoice> createInvoice(Map<String, dynamic> data) async {
     try {
       final invoice = await _repository.createInvoice(data);
       // Reload the list
-      await loadInvoices();
+      state = await AsyncValue.guard(() => _loadInvoices());
       return invoice;
     } catch (e) {
       rethrow;
@@ -48,7 +46,7 @@ class InvoiceNotifier extends StateNotifier<AsyncValue<List<Invoice>>> {
     try {
       final invoice = await _repository.updateInvoice(id, data);
       // Reload the list
-      await loadInvoices();
+      state = await AsyncValue.guard(() => _loadInvoices());
       return invoice;
     } catch (e) {
       rethrow;
@@ -59,14 +57,11 @@ class InvoiceNotifier extends StateNotifier<AsyncValue<List<Invoice>>> {
     try {
       await _repository.delete(id);
       // Reload the list
-      await loadInvoices();
+      state = await AsyncValue.guard(() => _loadInvoices());
     } catch (e) {
       rethrow;
     }
   }
 }
 
-final invoiceNotifierProvider = StateNotifierProvider<InvoiceNotifier, AsyncValue<List<Invoice>>>((ref) {
-  final repository = ref.watch(invoiceRepositoryProvider);
-  return InvoiceNotifier(repository);
-});
+final invoiceNotifierProvider = AsyncNotifierProvider<InvoiceNotifier, List<Invoice>>(InvoiceNotifier.new);

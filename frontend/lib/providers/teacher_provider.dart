@@ -18,26 +18,24 @@ final teacherProvider = FutureProvider.family<Teacher, String>((ref, id) async {
   return await repository.getTeacherById(id);
 });
 
-class TeacherNotifier extends StateNotifier<AsyncValue<List<Teacher>>> {
-  final TeacherRepository _repository;
+class TeacherNotifier extends AsyncNotifier<List<Teacher>> {
+  late final TeacherRepository _repository;
 
-  TeacherNotifier(this._repository) : super(const AsyncValue.loading());
+  @override
+  Future<List<Teacher>> build() async {
+    _repository = ref.read(teacherRepositoryProvider);
+    return await _loadTeachers();
+  }
 
-  Future<void> loadTeachers() async {
-    state = const AsyncValue.loading();
-    try {
-      final teachers = await _repository.getTeachers();
-      state = AsyncValue.data(teachers);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+  Future<List<Teacher>> _loadTeachers() async {
+    return await _repository.getTeachers();
   }
 
   Future<Teacher> createTeacher(Map<String, dynamic> data) async {
     try {
       final teacher = await _repository.createTeacher(data);
       // Reload the list
-      await loadTeachers();
+      state = await AsyncValue.guard(() => _loadTeachers());
       return teacher;
     } catch (e) {
       rethrow;
@@ -48,7 +46,7 @@ class TeacherNotifier extends StateNotifier<AsyncValue<List<Teacher>>> {
     try {
       final teacher = await _repository.updateTeacher(id, data);
       // Reload the list
-      await loadTeachers();
+      state = await AsyncValue.guard(() => _loadTeachers());
       return teacher;
     } catch (e) {
       rethrow;
@@ -59,14 +57,11 @@ class TeacherNotifier extends StateNotifier<AsyncValue<List<Teacher>>> {
     try {
       await _repository.delete(id);
       // Reload the list
-      await loadTeachers();
+      state = await AsyncValue.guard(() => _loadTeachers());
     } catch (e) {
       rethrow;
     }
   }
 }
 
-final teacherNotifierProvider = StateNotifierProvider<TeacherNotifier, AsyncValue<List<Teacher>>>((ref) {
-  final repository = ref.watch(teacherRepositoryProvider);
-  return TeacherNotifier(repository);
-});
+final teacherNotifierProvider = AsyncNotifierProvider<TeacherNotifier, List<Teacher>>(TeacherNotifier.new);

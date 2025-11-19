@@ -18,26 +18,24 @@ final examProvider = FutureProvider.family<Exam, String>((ref, id) async {
   return await repository.getExamById(id);
 });
 
-class ExamNotifier extends StateNotifier<AsyncValue<List<Exam>>> {
-  final ExamRepository _repository;
+class ExamNotifier extends AsyncNotifier<List<Exam>> {
+  late final ExamRepository _repository;
 
-  ExamNotifier(this._repository) : super(const AsyncValue.loading());
+  @override
+  Future<List<Exam>> build() async {
+    _repository = ref.read(examRepositoryProvider);
+    return await _loadExams();
+  }
 
-  Future<void> loadExams() async {
-    state = const AsyncValue.loading();
-    try {
-      final exams = await _repository.getExams();
-      state = AsyncValue.data(exams);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+  Future<List<Exam>> _loadExams() async {
+    return await _repository.getExams();
   }
 
   Future<Exam> createExam(Map<String, dynamic> data) async {
     try {
       final exam = await _repository.createExam(data);
       // Reload the list
-      await loadExams();
+      state = await AsyncValue.guard(() => _loadExams());
       return exam;
     } catch (e) {
       rethrow;
@@ -48,7 +46,7 @@ class ExamNotifier extends StateNotifier<AsyncValue<List<Exam>>> {
     try {
       final exam = await _repository.updateExam(id, data);
       // Reload the list
-      await loadExams();
+      state = await AsyncValue.guard(() => _loadExams());
       return exam;
     } catch (e) {
       rethrow;
@@ -59,14 +57,11 @@ class ExamNotifier extends StateNotifier<AsyncValue<List<Exam>>> {
     try {
       await _repository.delete(id);
       // Reload the list
-      await loadExams();
+      state = await AsyncValue.guard(() => _loadExams());
     } catch (e) {
       rethrow;
     }
   }
 }
 
-final examNotifierProvider = StateNotifierProvider<ExamNotifier, AsyncValue<List<Exam>>>((ref) {
-  final repository = ref.watch(examRepositoryProvider);
-  return ExamNotifier(repository);
-});
+final examNotifierProvider = AsyncNotifierProvider<ExamNotifier, List<Exam>>(ExamNotifier.new);

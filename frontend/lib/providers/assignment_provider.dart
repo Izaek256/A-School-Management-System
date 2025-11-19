@@ -18,26 +18,24 @@ final assignmentProvider = FutureProvider.family<Assignment, String>((ref, id) a
   return await repository.getAssignmentById(id);
 });
 
-class AssignmentNotifier extends StateNotifier<AsyncValue<List<Assignment>>> {
-  final AssignmentRepository _repository;
+class AssignmentNotifier extends AsyncNotifier<List<Assignment>> {
+  late final AssignmentRepository _repository;
 
-  AssignmentNotifier(this._repository) : super(const AsyncValue.loading());
+  @override
+  Future<List<Assignment>> build() async {
+    _repository = ref.read(assignmentRepositoryProvider);
+    return await _loadAssignments();
+  }
 
-  Future<void> loadAssignments() async {
-    state = const AsyncValue.loading();
-    try {
-      final assignments = await _repository.getAssignments();
-      state = AsyncValue.data(assignments);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+  Future<List<Assignment>> _loadAssignments() async {
+    return await _repository.getAssignments();
   }
 
   Future<Assignment> createAssignment(Map<String, dynamic> data) async {
     try {
       final assignment = await _repository.createAssignment(data);
       // Reload the list
-      await loadAssignments();
+      state = await AsyncValue.guard(() => _loadAssignments());
       return assignment;
     } catch (e) {
       rethrow;
@@ -48,7 +46,7 @@ class AssignmentNotifier extends StateNotifier<AsyncValue<List<Assignment>>> {
     try {
       final assignment = await _repository.updateAssignment(id, data);
       // Reload the list
-      await loadAssignments();
+      state = await AsyncValue.guard(() => _loadAssignments());
       return assignment;
     } catch (e) {
       rethrow;
@@ -59,14 +57,11 @@ class AssignmentNotifier extends StateNotifier<AsyncValue<List<Assignment>>> {
     try {
       await _repository.delete(id);
       // Reload the list
-      await loadAssignments();
+      state = await AsyncValue.guard(() => _loadAssignments());
     } catch (e) {
       rethrow;
     }
   }
 }
 
-final assignmentNotifierProvider = StateNotifierProvider<AssignmentNotifier, AsyncValue<List<Assignment>>>((ref) {
-  final repository = ref.watch(assignmentRepositoryProvider);
-  return AssignmentNotifier(repository);
-});
+final assignmentNotifierProvider = AsyncNotifierProvider<AssignmentNotifier, List<Assignment>>(AssignmentNotifier.new);

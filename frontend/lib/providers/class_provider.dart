@@ -18,26 +18,24 @@ final classProvider = FutureProvider.family<ClassModel, String>((ref, id) async 
   return await repository.getClassById(id);
 });
 
-class ClassNotifier extends StateNotifier<AsyncValue<List<ClassModel>>> {
-  final ClassRepository _repository;
+class ClassNotifier extends AsyncNotifier<List<ClassModel>> {
+  late final ClassRepository _repository;
 
-  ClassNotifier(this._repository) : super(const AsyncValue.loading());
+  @override
+  Future<List<ClassModel>> build() async {
+    _repository = ref.read(classRepositoryProvider);
+    return await _loadClasses();
+  }
 
-  Future<void> loadClasses() async {
-    state = const AsyncValue.loading();
-    try {
-      final classes = await _repository.getClasses();
-      state = AsyncValue.data(classes);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+  Future<List<ClassModel>> _loadClasses() async {
+    return await _repository.getClasses();
   }
 
   Future<ClassModel> createClass(Map<String, dynamic> data) async {
     try {
       final classModel = await _repository.createClass(data);
       // Reload the list
-      await loadClasses();
+      state = await AsyncValue.guard(() => _loadClasses());
       return classModel;
     } catch (e) {
       rethrow;
@@ -48,7 +46,7 @@ class ClassNotifier extends StateNotifier<AsyncValue<List<ClassModel>>> {
     try {
       final classModel = await _repository.updateClass(id, data);
       // Reload the list
-      await loadClasses();
+      state = await AsyncValue.guard(() => _loadClasses());
       return classModel;
     } catch (e) {
       rethrow;
@@ -59,14 +57,11 @@ class ClassNotifier extends StateNotifier<AsyncValue<List<ClassModel>>> {
     try {
       await _repository.delete(id);
       // Reload the list
-      await loadClasses();
+      state = await AsyncValue.guard(() => _loadClasses());
     } catch (e) {
       rethrow;
     }
   }
 }
 
-final classNotifierProvider = StateNotifierProvider<ClassNotifier, AsyncValue<List<ClassModel>>>((ref) {
-  final repository = ref.watch(classRepositoryProvider);
-  return ClassNotifier(repository);
-});
+final classNotifierProvider = AsyncNotifierProvider<ClassNotifier, List<ClassModel>>(ClassNotifier.new);

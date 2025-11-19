@@ -18,26 +18,24 @@ final notificationProvider = FutureProvider.family<NotificationModel, String>((r
   return await repository.getNotificationById(id);
 });
 
-class NotificationNotifier extends StateNotifier<AsyncValue<List<NotificationModel>>> {
-  final NotificationRepository _repository;
+class NotificationNotifier extends AsyncNotifier<List<NotificationModel>> {
+  late final NotificationRepository _repository;
 
-  NotificationNotifier(this._repository) : super(const AsyncValue.loading());
+  @override
+  Future<List<NotificationModel>> build() async {
+    _repository = ref.read(notificationRepositoryProvider);
+    return await _loadNotifications();
+  }
 
-  Future<void> loadNotifications() async {
-    state = const AsyncValue.loading();
-    try {
-      final notifications = await _repository.getNotifications();
-      state = AsyncValue.data(notifications);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+  Future<List<NotificationModel>> _loadNotifications() async {
+    return await _repository.getNotifications();
   }
 
   Future<NotificationModel> createNotification(Map<String, dynamic> data) async {
     try {
       final notification = await _repository.createNotification(data);
       // Reload the list
-      await loadNotifications();
+      state = await AsyncValue.guard(() => _loadNotifications());
       return notification;
     } catch (e) {
       rethrow;
@@ -48,7 +46,7 @@ class NotificationNotifier extends StateNotifier<AsyncValue<List<NotificationMod
     try {
       final notification = await _repository.updateNotification(id, data);
       // Reload the list
-      await loadNotifications();
+      state = await AsyncValue.guard(() => _loadNotifications());
       return notification;
     } catch (e) {
       rethrow;
@@ -59,14 +57,11 @@ class NotificationNotifier extends StateNotifier<AsyncValue<List<NotificationMod
     try {
       await _repository.delete(id);
       // Reload the list
-      await loadNotifications();
+      state = await AsyncValue.guard(() => _loadNotifications());
     } catch (e) {
       rethrow;
     }
   }
 }
 
-final notificationNotifierProvider = StateNotifierProvider<NotificationNotifier, AsyncValue<List<NotificationModel>>>((ref) {
-  final repository = ref.watch(notificationRepositoryProvider);
-  return NotificationNotifier(repository);
-});
+final notificationNotifierProvider = AsyncNotifierProvider<NotificationNotifier, List<NotificationModel>>(NotificationNotifier.new);
