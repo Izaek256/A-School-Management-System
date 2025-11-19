@@ -32,10 +32,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         await ref
             .read(authStateProvider.notifier)
             .login(_usernameController.text, _passwordController.text);
-            
+
         // Check if login was successful
         final authState = ref.read(authStateProvider);
-        if (authState.isAuthenticated) {
+        if (authState is AsyncData<AuthState> &&
+            authState.value.isAuthenticated) {
           // Navigate to dashboard
           if (mounted) {
             Navigator.pushReplacementNamed(context, '/dashboard');
@@ -56,9 +57,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final authState = ref.watch(authStateProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -95,9 +94,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 },
               ),
               const SizedBox(height: 24),
-              if (authState.errorMessage != null)
+              if (authState is AsyncError<AuthState>)
                 Text(
-                  authState.errorMessage!,
+                  authState.error.toString(),
+                  style: const TextStyle(color: Colors.red),
+                )
+              else if (authState is AsyncData<AuthState> &&
+                  authState.value.errorMessage != null)
+                Text(
+                  authState.value.errorMessage!,
                   style: const TextStyle(color: Colors.red),
                 ),
               const SizedBox(height: 16),
