@@ -6,7 +6,7 @@ class InvoiceRepository extends BaseRepository {
   InvoiceRepository(super.apiService);
 
   @override
-  String get basePath => '/invoices';
+  String get basePath => '/api/finance/invoices';
 
   Future<List<Invoice>> getInvoices() async {
     return await getList(Invoice.fromJson);

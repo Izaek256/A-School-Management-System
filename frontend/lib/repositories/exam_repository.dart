@@ -6,7 +6,7 @@ class ExamRepository extends BaseRepository {
   ExamRepository(super.apiService);
 
   @override
-  String get basePath => '/exams';
+  String get basePath => '/api/academics/exams';
 
   Future<List<Exam>> getExams() async {
     return await getList(Exam.fromJson);

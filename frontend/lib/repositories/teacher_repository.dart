@@ -6,7 +6,7 @@ class TeacherRepository extends BaseRepository {
   TeacherRepository(super.apiService);
 
   @override
-  String get basePath => '/teachers';
+  String get basePath => '/api/teachers/teachers';
 
   Future<List<Teacher>> getTeachers() async {
     return await getList(Teacher.fromJson);

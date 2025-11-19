@@ -1,36 +1,79 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/utils/config.dart';
+import 'package:frontend/exceptions/api_exception.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:8000/api';
-  
+  static String baseUrl = Config.baseUrl;
+
   final Dio _dio = Dio();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   ApiService() {
     _dio.options.baseUrl = baseUrl;
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        final token = await _storage.read(key: 'token');
-        if (token != null) {
-          options.headers['Authorization'] = 'Bearer $token';
-        }
-        return handler.next(options);
-      },
-      onResponse: (response, handler) {
-        return handler.next(response);
-      },
-      onError: (DioException e, handler) {
-        return handler.next(e);
-      },
-    ));
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await _storage.read(key: 'token');
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          return handler.next(response);
+        },
+        onError: (DioException e, handler) {
+          _handleDioError(e);
+          return handler.next(e);
+        },
+      ),
+    );
   }
 
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) async {
+  void _handleDioError(DioException e) {
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        throw TimeoutException();
+      case DioExceptionType.badResponse:
+        switch (e.response?.statusCode) {
+          case 401:
+            throw UnauthorizedException();
+          case 403:
+            throw ForbiddenException();
+          case 404:
+            throw NotFoundException();
+          case 500:
+          case 502:
+          case 503:
+            throw ServerException();
+          default:
+            throw ApiException(
+              e.response?.statusMessage ?? 'Unknown error',
+              statusCode: e.response?.statusCode,
+              data: e.response?.data,
+            );
+        }
+      case DioExceptionType.cancel:
+        throw ApiException('Request was cancelled');
+      case DioExceptionType.unknown:
+        throw NetworkException();
+      default:
+        throw ApiException(e.message ?? 'Unknown error');
+    }
+  }
+
+  Future<Response> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
     try {
       final response = await _dio.get(path, queryParameters: queryParameters);
       return response;
     } on DioException catch (e) {
+      _handleDioError(e);
       rethrow;
     }
   }
@@ -40,6 +83,7 @@ class ApiService {
       final response = await _dio.post(path, data: data);
       return response;
     } on DioException catch (e) {
+      _handleDioError(e);
       rethrow;
     }
   }
@@ -49,6 +93,7 @@ class ApiService {
       final response = await _dio.put(path, data: data);
       return response;
     } on DioException catch (e) {
+      _handleDioError(e);
       rethrow;
     }
   }
@@ -58,6 +103,7 @@ class ApiService {
       final response = await _dio.delete(path);
       return response;
     } on DioException catch (e) {
+      _handleDioError(e);
       rethrow;
     }
   }

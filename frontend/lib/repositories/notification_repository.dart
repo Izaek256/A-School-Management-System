@@ -6,7 +6,7 @@ class NotificationRepository extends BaseRepository {
   NotificationRepository(super.apiService);
 
   @override
-  String get basePath => '/notifications';
+  String get basePath => '/api/notifications/notifications';
 
   Future<List<NotificationModel>> getNotifications() async {
     return await getList(NotificationModel.fromJson);
@@ -16,11 +16,16 @@ class NotificationRepository extends BaseRepository {
     return await getById(id, NotificationModel.fromJson);
   }
 
-  Future<NotificationModel> createNotification(Map<String, dynamic> data) async {
+  Future<NotificationModel> createNotification(
+    Map<String, dynamic> data,
+  ) async {
     return await create(data, NotificationModel.fromJson);
   }
 
-  Future<NotificationModel> updateNotification(String id, Map<String, dynamic> data) async {
+  Future<NotificationModel> updateNotification(
+    String id,
+    Map<String, dynamic> data,
+  ) async {
     return await update(id, data, NotificationModel.fromJson);
   }
 }

@@ -6,7 +6,7 @@ class AssignmentRepository extends BaseRepository {
   AssignmentRepository(super.apiService);
 
   @override
-  String get basePath => '/assignments';
+  String get basePath => '/api/assignments/assignments';
 
   Future<List<Assignment>> getAssignments() async {
     return await getList(Assignment.fromJson);
@@ -20,7 +20,10 @@ class AssignmentRepository extends BaseRepository {
     return await create(data, Assignment.fromJson);
   }
 
-  Future<Assignment> updateAssignment(String id, Map<String, dynamic> data) async {
+  Future<Assignment> updateAssignment(
+    String id,
+    Map<String, dynamic> data,
+  ) async {
     return await update(id, data, Assignment.fromJson);
   }
 }

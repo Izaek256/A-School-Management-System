@@ -6,7 +6,7 @@ class AnnouncementRepository extends BaseRepository {
   AnnouncementRepository(super.apiService);
 
   @override
-  String get basePath => '/announcements';
+  String get basePath => '/api/communication/announcements';
 
   Future<List<Announcement>> getAnnouncements() async {
     return await getList(Announcement.fromJson);
@@ -20,7 +20,10 @@ class AnnouncementRepository extends BaseRepository {
     return await create(data, Announcement.fromJson);
   }
 
-  Future<Announcement> updateAnnouncement(String id, Map<String, dynamic> data) async {
+  Future<Announcement> updateAnnouncement(
+    String id,
+    Map<String, dynamic> data,
+  ) async {
     return await update(id, data, Announcement.fromJson);
   }
 }
