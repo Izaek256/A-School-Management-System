@@ -3,7 +3,7 @@ import 'package:frontend/services/api_service.dart';
 import 'package:frontend/models/assignment.dart';
 
 class AssignmentRepository extends BaseRepository {
-  AssignmentRepository(ApiService apiService) : super(apiService);
+  AssignmentRepository(super.apiService);
 
   @override
   String get basePath => '/assignments';

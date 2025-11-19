@@ -14,7 +14,7 @@ abstract class BaseRepository {
       final List<dynamic> data = response.data as List;
       return data.map((item) => fromJson(item as Map<String, dynamic>)).toList();
     } on DioException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -23,7 +23,7 @@ abstract class BaseRepository {
       final response = await apiService.get('$basePath/$id/');
       return fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -32,7 +32,7 @@ abstract class BaseRepository {
       final response = await apiService.post(basePath, data: data);
       return fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -41,7 +41,7 @@ abstract class BaseRepository {
       final response = await apiService.put('$basePath/$id/', data: data);
       return fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -49,7 +49,7 @@ abstract class BaseRepository {
     try {
       await apiService.delete('$basePath/$id/');
     } on DioException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

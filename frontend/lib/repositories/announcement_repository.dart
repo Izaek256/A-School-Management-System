@@ -3,7 +3,7 @@ import 'package:frontend/services/api_service.dart';
 import 'package:frontend/models/announcement.dart';
 
 class AnnouncementRepository extends BaseRepository {
-  AnnouncementRepository(ApiService apiService) : super(apiService);
+  AnnouncementRepository(super.apiService);
 
   @override
   String get basePath => '/announcements';

@@ -31,7 +31,7 @@ class ApiService {
       final response = await _dio.get(path, queryParameters: queryParameters);
       return response;
     } on DioException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -40,7 +40,7 @@ class ApiService {
       final response = await _dio.post(path, data: data);
       return response;
     } on DioException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -49,7 +49,7 @@ class ApiService {
       final response = await _dio.put(path, data: data);
       return response;
     } on DioException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -58,7 +58,7 @@ class ApiService {
       final response = await _dio.delete(path);
       return response;
     } on DioException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

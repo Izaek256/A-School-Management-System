@@ -3,7 +3,7 @@ import 'package:frontend/services/api_service.dart';
 import 'package:frontend/models/invoice.dart';
 
 class InvoiceRepository extends BaseRepository {
-  InvoiceRepository(ApiService apiService) : super(apiService);
+  InvoiceRepository(super.apiService);
 
   @override
   String get basePath => '/invoices';

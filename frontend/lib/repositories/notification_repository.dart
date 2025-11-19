@@ -3,7 +3,7 @@ import 'package:frontend/services/api_service.dart';
 import 'package:frontend/models/notification.dart';
 
 class NotificationRepository extends BaseRepository {
-  NotificationRepository(ApiService apiService) : super(apiService);
+  NotificationRepository(super.apiService);
 
   @override
   String get basePath => '/notifications';
