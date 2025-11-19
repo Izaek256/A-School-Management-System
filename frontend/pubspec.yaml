@@ -38,7 +38,7 @@ dependencies:
   # Networking
   dio: ^5.4.0
   retrofit: ^4.0.3
-  flutter_dotenv: ^0.4.5
+  flutter_dotenv: ^6.0.0
   
   # Routing
   go_router: ^17.0.0

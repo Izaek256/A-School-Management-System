@@ -31,14 +31,15 @@ class AuthState {
   }
 }
 
-final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier(ref);
-});
+final authStateProvider = AsyncNotifierProvider<AuthNotifier, AuthState>(
+  AuthNotifier.new,
+);
 
-class AuthNotifier extends StateNotifier<AuthState> {
-  final Ref ref;
-
-  AuthNotifier(this.ref) : super(AuthState(isAuthenticated: false));
+class AuthNotifier extends AsyncNotifier<AuthState> {
+  @override
+  Future<AuthState> build() async {
+    return AuthState(isAuthenticated: false);
+  }
 
   Future<void> login(String username, String password) async {
     try {
@@ -58,17 +59,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
         // Create user object
         final user = User.fromJson(userData);
 
-        state = state.copyWith(
-          isAuthenticated: true,
-          token: accessToken,
-          user: user,
-          errorMessage: null,
-        );
+        state = await AsyncValue.guard(() async {
+          return AuthState(
+            isAuthenticated: true,
+            token: accessToken,
+            user: user,
+            errorMessage: null,
+          );
+        });
       } else {
-        state = state.copyWith(
-          isAuthenticated: false,
-          errorMessage: 'Login failed',
-        );
+        state = await AsyncValue.guard(() async {
+          return AuthState(
+            isAuthenticated: false,
+            errorMessage: 'Login failed',
+          );
+        });
       }
     } on DioException catch (e) {
       String errorMessage = 'Login failed';
@@ -81,19 +86,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
         }
       }
 
-      state = state.copyWith(
-        isAuthenticated: false,
-        errorMessage: errorMessage,
-      );
+      state = await AsyncValue.guard(() async {
+        return AuthState(isAuthenticated: false, errorMessage: errorMessage);
+      });
     } catch (e) {
-      state = state.copyWith(
-        isAuthenticated: false,
-        errorMessage: 'An unexpected error occurred',
-      );
+      state = await AsyncValue.guard(() async {
+        return AuthState(
+          isAuthenticated: false,
+          errorMessage: 'An unexpected error occurred',
+        );
+      });
     }
   }
 
   Future<void> logout() async {
-    state = state.copyWith(isAuthenticated: false, token: null, user: null);
+    state = await AsyncValue.guard(() async {
+      return AuthState(isAuthenticated: false, token: null, user: null);
+    });
   }
 }
