@@ -70,7 +70,7 @@ class AssignmentsListView extends ConsumerWidget {
                 final rows = assignments.map((assignment) => [
                   assignment.title,
                   assignment.className,
-                  assignment.subject,
+                  assignment.subjectName,
                   assignment.dueDate,
                   assignment.isOverdue ? 'Overdue' : 'Active',
                   'View',
@@ -78,7 +78,7 @@ class AssignmentsListView extends ConsumerWidget {
 
                 return AppTable(
                   headers: headers,
-                  rows: rows,
+                  rows: rows.map((row) => row.map((e) => e.toString()).toList()).toList(),
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),

@@ -89,69 +89,6 @@ class AnnouncementsView extends ConsumerWidget {
                                   child: Text(
                                     announcement.priority.toUpperCase(),
                                     style: TextStyle(
-                                      color: announcement.priorityColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  announcement.date,
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              announcement.title,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              announcement.content,
-                              style: const TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
-                                const CircleAvatar(
-                                  radius: 12,
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 12,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  announcement.author,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const Spacer(),
-                                if (announcement.attachments.isNotEmpty) ...[
-                                  const Icon(
-                                    Icons.attach_file,
-                                    size: 16,
-                                    color: Colors.grey,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text('${announcement.attachments.length}'),
-                                ],
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),

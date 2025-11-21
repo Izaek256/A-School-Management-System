@@ -31,8 +31,8 @@ class TeacherProfileView extends ConsumerWidget {
                 children: [
                   ProfileHeader(
                     title: teacher.fullName,
-                    subtitle: 'Teacher • ${teacher.subject}',
-                    imageUrl: teacher.profileImageUrl,
+                    subtitle: 'Teacher • ${teacher.department}',
+                    imageUrl: teacher.profileImageUrl ?? '',
                     actions: [
                       IconButton(
                         icon: const Icon(Icons.edit),
@@ -79,9 +79,10 @@ class TeacherProfileView extends ConsumerWidget {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                          _buildInfoRow('Subject', teacher.subject),
+                          _buildInfoRow('Department', teacher.department),
+                          _buildInfoRow('Designation', teacher.designation),
                           _buildInfoRow('Qualification', teacher.qualification),
-                          _buildInfoRow('Hire Date', teacher.hireDate),
+                          _buildInfoRow('Joining Date', teacher.joiningDate),
                         ],
                       ),
                     ),

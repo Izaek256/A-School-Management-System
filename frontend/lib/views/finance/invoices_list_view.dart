@@ -66,19 +66,19 @@ class InvoicesListView extends ConsumerWidget {
                   );
                 }
 
-                final headers = ['Student', 'Class', 'Amount', 'Due Date', 'Status', 'Actions'];
+                final headers = ['Invoice #', 'Student', 'Amount', 'Date', 'Status', 'Actions'];
                 final rows = invoices.map((invoice) => [
+                  invoice.invoiceNumber,
                   invoice.studentName,
-                  invoice.className,
-                  '\$${invoice.amount.toStringAsFixed(2)}',
-                  invoice.dueDate,
+                  '\$${invoice.totalAmount.toStringAsFixed(2)}',
+                  invoice.invoiceDate,
                   _getStatusText(invoice.status),
                   'View',
                 ]).toList();
 
                 return AppTable(
                   headers: headers,
-                  rows: rows,
+                  rows: rows.map((row) => row.map((e) => e.toString()).toList()).toList(),
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),

@@ -55,7 +55,7 @@ class ClassDetailsView extends ConsumerWidget {
                               const Icon(Icons.person, color: Colors.blue),
                               const SizedBox(width: 8),
                               Text(
-                                'Teacher: ${classModel.teacherName}',
+                                'Teacher: ${classModel.classTeacherName ?? 'N/A'}',
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ],
@@ -66,7 +66,7 @@ class ClassDetailsView extends ConsumerWidget {
                               const Icon(Icons.people, color: Colors.green),
                               const SizedBox(width: 8),
                               Text(
-                                'Students: ${classModel.studentCount}',
+                                'Capacity: ${classModel.capacity}',
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ],
@@ -77,7 +77,7 @@ class ClassDetailsView extends ConsumerWidget {
                               const Icon(Icons.calendar_today, color: Colors.orange),
                               const SizedBox(width: 8),
                               Text(
-                                'Academic Year: ${classModel.academicYear}',
+                                'Academic Year: ${classModel.academicYearName ?? 'N/A'}',
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ],
@@ -100,9 +100,9 @@ class ClassDetailsView extends ConsumerWidget {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                          _buildInfoRow('Class ID', classModel.id),
-                          _buildInfoRow('Teacher ID', classModel.teacherId),
-                          _buildInfoRow('Academic Year', classModel.academicYear),
+                          _buildInfoRow('Class ID', classModel.id.toString()),
+                          _buildInfoRow('Teacher ID', classModel.classTeacherId?.toString() ?? 'N/A'),
+                          _buildInfoRow('Academic Year', classModel.academicYearName ?? 'N/A'),
                         ],
                       ),
                     ),

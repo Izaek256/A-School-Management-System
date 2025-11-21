@@ -70,14 +70,14 @@ class ExamsListView extends ConsumerWidget {
                 final rows = exams.map((exam) => [
                   exam.name,
                   exam.className,
-                  exam.subject,
+                  exam.subjectName,
                   exam.date,
                   'View Results',
                 ]).toList();
 
                 return AppTable(
                   headers: headers,
-                  rows: rows,
+                  rows: rows.map((row) => row.map((e) => e.toString()).toList()).toList(),
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),

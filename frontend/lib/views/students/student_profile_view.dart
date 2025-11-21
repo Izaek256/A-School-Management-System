@@ -32,7 +32,7 @@ class StudentProfileView extends ConsumerWidget {
                   ProfileHeader(
                     title: student.fullName,
                     subtitle: 'Student • ${student.className}',
-                    imageUrl: student.profileImageUrl,
+                    imageUrl: student.profileImageUrl ?? '',
                     actions: [
                       IconButton(
                         icon: const Icon(Icons.edit),
@@ -80,8 +80,9 @@ class StudentProfileView extends ConsumerWidget {
                       child: Column(
                         children: [
                           _buildInfoRow('Class', student.className),
-                          _buildInfoRow('Enrollment Date', student.enrollmentDate),
-                          _buildInfoRow('Parent ID', student.parentId),
+                          _buildInfoRow('Admission Date', student.admissionDate),
+                          if (student.parentPhone != null)
+                            _buildInfoRow('Parent Phone', student.parentPhone!),
                         ],
                       ),
                     ),

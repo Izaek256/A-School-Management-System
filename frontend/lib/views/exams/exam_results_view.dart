@@ -45,7 +45,7 @@ class ExamResultsView extends ConsumerWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '${exam.className} - ${exam.subject}',
+                            '${exam.className} - ${exam.subjectName}',
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.grey,
@@ -60,7 +60,7 @@ class ExamResultsView extends ConsumerWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Total Marks: ${exam.totalMarks}',
+                            'Max Marks: ${exam.maxMarks}',
                             style: const TextStyle(
                               fontSize: 16,
                             ),

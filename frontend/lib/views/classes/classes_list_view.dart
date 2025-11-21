@@ -65,18 +65,18 @@ class ClassesListView extends ConsumerWidget {
                   );
                 }
 
-                final headers = ['Name', 'Section', 'Teacher', 'Students', 'Actions'];
+                final headers = ['Name', 'Section', 'Teacher', 'Capacity', 'Actions'];
                 final rows = classes.map((classModel) => [
                   classModel.name,
                   classModel.section,
-                  classModel.teacherName,
-                  classModel.studentCount.toString(),
+                  classModel.classTeacherName ?? 'N/A',
+                  classModel.capacity.toString(),
                   'View',
                 ]).toList();
 
                 return AppTable(
                   headers: headers,
-                  rows: rows,
+                  rows: rows.map((row) => row.map((e) => e.toString()).toList()).toList(),
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),

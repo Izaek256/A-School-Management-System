@@ -65,10 +65,10 @@ class TeachersListView extends ConsumerWidget {
                   );
                 }
 
-                final headers = ['Name', 'Subject', 'Email', 'Phone', 'Actions'];
+                final headers = ['Name', 'Department', 'Email', 'Phone', 'Actions'];
                 final rows = teachers.map((teacher) => [
                   teacher.fullName,
-                  teacher.subject,
+                  teacher.department,
                   teacher.email,
                   teacher.phone,
                   'View',
@@ -76,7 +76,7 @@ class TeachersListView extends ConsumerWidget {
 
                 return AppTable(
                   headers: headers,
-                  rows: rows,
+                  rows: rows.map((row) => row.map((e) => e.toString()).toList()).toList(),
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
