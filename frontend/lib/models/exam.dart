@@ -1,40 +1,46 @@
 class Exam {
-  final String id;
+  final int id;
   final String name;
-  final String classId;
+  final int classId;
   final String className;
-  final String subject;
+  final int subjectId;
+  final String subjectName;
   final String date;
   final String startTime;
   final String endTime;
   final String examType;
-  final int totalMarks;
+  final double maxMarks;
+  final double passingMarks;
 
   Exam({
     required this.id,
     required this.name,
     required this.classId,
     required this.className,
-    required this.subject,
+    required this.subjectId,
+    required this.subjectName,
     required this.date,
     required this.startTime,
     required this.endTime,
     required this.examType,
-    required this.totalMarks,
+    required this.maxMarks,
+    required this.passingMarks,
   });
 
   factory Exam.fromJson(Map<String, dynamic> json) {
     return Exam(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      classId: json['class_id'] as String,
-      className: json['class_name'] as String,
-      subject: json['subject'] as String,
-      date: json['date'] as String,
-      startTime: json['start_time'] as String,
-      endTime: json['end_time'] as String,
-      examType: json['exam_type'] as String,
-      totalMarks: json['total_marks'] as int,
+      id: json['id'],
+      name: json['name'] ?? '',
+      classId: json['class_assigned'] ?? 0,
+      className: json['class_name'] ?? '',
+      subjectId: json['subject'] ?? 0,
+      subjectName: json['subject_name'] ?? '',
+      date: json['date'] ?? '',
+      startTime: json['start_time'] ?? '',
+      endTime: json['end_time'] ?? '',
+      examType: json['exam_type'] ?? '',
+      maxMarks: (json['max_marks'] as num?)?.toDouble() ?? 0.0,
+      passingMarks: (json['passing_marks'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -42,14 +48,16 @@ class Exam {
     return {
       'id': id,
       'name': name,
-      'class_id': classId,
+      'class_assigned': classId,
       'class_name': className,
-      'subject': subject,
+      'subject': subjectId,
+      'subject_name': subjectName,
       'date': date,
       'start_time': startTime,
       'end_time': endTime,
       'exam_type': examType,
-      'total_marks': totalMarks,
+      'max_marks': maxMarks,
+      'passing_marks': passingMarks,
     };
   }
 }

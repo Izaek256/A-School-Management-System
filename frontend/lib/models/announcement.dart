@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
 
 class Announcement {
-  final String id;
+  final int id;
   final String title;
   final String content;
-  final String author;
-  final String date;
-  final String priority; // high, medium, low
-  final List<String> attachments;
+  final int authorId;
+  final String authorName;
+  final String publishDate;
+  final String priority;
+  final bool isPublished;
 
   Announcement({
     required this.id,
     required this.title,
     required this.content,
-    required this.author,
-    required this.date,
+    required this.authorId,
+    required this.authorName,
+    required this.publishDate,
     required this.priority,
-    required this.attachments,
+    required this.isPublished,
   });
 
   factory Announcement.fromJson(Map<String, dynamic> json) {
     return Announcement(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      content: json['content'] as String,
-      author: json['author'] as String,
-      date: json['date'] as String,
-      priority: json['priority'] as String,
-      attachments: List<String>.from(json['attachments'] as List),
+      id: json['id'],
+      title: json['title'] ?? '',
+      content: json['content'] ?? '',
+      authorId: json['author'] ?? 0,
+      authorName: json['author_name'] ?? '',
+      publishDate: json['publish_date'] ?? '',
+      priority: json['priority'] ?? 'medium',
+      isPublished: json['is_published'] ?? false,
     );
   }
 
@@ -36,10 +39,11 @@ class Announcement {
       'id': id,
       'title': title,
       'content': content,
-      'author': author,
-      'date': date,
+      'author': authorId,
+      'author_name': authorName,
+      'publish_date': publishDate,
       'priority': priority,
-      'attachments': attachments,
+      'is_published': isPublished,
     };
   }
 

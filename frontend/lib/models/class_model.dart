@@ -1,31 +1,34 @@
 class ClassModel {
-  final String id;
+  final int id;
   final String name;
   final String section;
-  final String teacherId;
-  final String teacherName;
-  final int studentCount;
-  final String academicYear;
+  final int? classTeacherId;
+  final String? classTeacherName;
+  final int capacity;
+  final int? academicYearId;
+  final String? academicYearName;
 
   ClassModel({
     required this.id,
     required this.name,
     required this.section,
-    required this.teacherId,
-    required this.teacherName,
-    required this.studentCount,
-    required this.academicYear,
+    this.classTeacherId,
+    this.classTeacherName,
+    required this.capacity,
+    this.academicYearId,
+    this.academicYearName,
   });
 
   factory ClassModel.fromJson(Map<String, dynamic> json) {
     return ClassModel(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      section: json['section'] as String,
-      teacherId: json['teacher_id'] as String,
-      teacherName: json['teacher_name'] as String,
-      studentCount: json['student_count'] as int,
-      academicYear: json['academic_year'] as String,
+      id: json['id'],
+      name: json['name'] ?? '',
+      section: json['section'] ?? '',
+      classTeacherId: json['class_teacher'],
+      classTeacherName: json['class_teacher_name'],
+      capacity: json['capacity'] ?? 0,
+      academicYearId: json['academic_year'],
+      academicYearName: json['academic_year_name'],
     );
   }
 
@@ -34,10 +37,11 @@ class ClassModel {
       'id': id,
       'name': name,
       'section': section,
-      'teacher_id': teacherId,
-      'teacher_name': teacherName,
-      'student_count': studentCount,
-      'academic_year': academicYear,
+      'class_teacher': classTeacherId,
+      'class_teacher_name': classTeacherName,
+      'capacity': capacity,
+      'academic_year': academicYearId,
+      'academic_year_name': academicYearName,
     };
   }
 }

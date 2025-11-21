@@ -1,6 +1,6 @@
 class AppConstants {
   // API Constants
-  static const String baseUrl = 'http://localhost:8000/api';
+  static const String baseUrl = 'http://localhost:8000';
   
   // Storage Keys
   static const String tokenKey = 'auth_token';

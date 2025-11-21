@@ -28,7 +28,7 @@ class User {
       firstName: json['first_name'],
       lastName: json['last_name'],
       profilePicture: json['profile_picture'],
-      createdAt: DateTime.parse(json['created_at']),
+      createdAt: DateTime.parse(json['date_joined']),
     );
   }
 
@@ -41,7 +41,7 @@ class User {
       'first_name': firstName,
       'last_name': lastName,
       'profile_picture': profilePicture,
-      'created_at': createdAt.toIso8601String(),
+      'date_joined': createdAt.toIso8601String(),
     };
   }
 }

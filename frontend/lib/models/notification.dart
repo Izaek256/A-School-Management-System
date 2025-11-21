@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 
 class NotificationModel {
-  final String id;
+  final int id;
   final String title;
-  final String content;
-  final String date;
+  final String message;
+  final String notificationType;
   final bool isRead;
-  final String type; // assignment, exam, announcement, payment
+  final String createdAt;
 
   NotificationModel({
     required this.id,
     required this.title,
-    required this.content,
-    required this.date,
+    required this.message,
+    required this.notificationType,
     required this.isRead,
-    required this.type,
+    required this.createdAt,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      content: json['content'] as String,
-      date: json['date'] as String,
-      isRead: json['is_read'] as bool,
-      type: json['type'] as String,
+      id: json['id'],
+      title: json['title'] ?? '',
+      message: json['message'] ?? '',
+      notificationType: json['notification_type'] ?? 'general',
+      isRead: json['is_read'] ?? false,
+      createdAt: json['created_at'] ?? '',
     );
   }
 
@@ -32,15 +32,15 @@ class NotificationModel {
     return {
       'id': id,
       'title': title,
-      'content': content,
-      'date': date,
+      'message': message,
+      'notification_type': notificationType,
       'is_read': isRead,
-      'type': type,
+      'created_at': createdAt,
     };
   }
 
   IconData get icon {
-    switch (type) {
+    switch (notificationType) {
       case 'assignment':
         return Icons.assignment;
       case 'exam':

@@ -1,15 +1,16 @@
 class Assignment {
-  final String id;
+  final int id;
   final String title;
   final String description;
-  final String classId;
+  final int classId;
   final String className;
-  final String subject;
-  final String teacherId;
+  final int subjectId;
+  final String subjectName;
+  final int teacherId;
   final String teacherName;
   final String dueDate;
   final String assignedDate;
-  final List<String> attachments;
+  final String? attachment;
 
   Assignment({
     required this.id,
@@ -17,27 +18,29 @@ class Assignment {
     required this.description,
     required this.classId,
     required this.className,
-    required this.subject,
+    required this.subjectId,
+    required this.subjectName,
     required this.teacherId,
     required this.teacherName,
     required this.dueDate,
     required this.assignedDate,
-    required this.attachments,
+    this.attachment,
   });
 
   factory Assignment.fromJson(Map<String, dynamic> json) {
     return Assignment(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      classId: json['class_id'] as String,
-      className: json['class_name'] as String,
-      subject: json['subject'] as String,
-      teacherId: json['teacher_id'] as String,
-      teacherName: json['teacher_name'] as String,
-      dueDate: json['due_date'] as String,
-      assignedDate: json['assigned_date'] as String,
-      attachments: List<String>.from(json['attachments'] as List),
+      id: json['id'],
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      classId: json['class_assigned'] ?? 0,
+      className: json['class_name'] ?? '',
+      subjectId: json['subject'] ?? 0,
+      subjectName: json['subject_name'] ?? '',
+      teacherId: json['teacher'] ?? 0,
+      teacherName: json['teacher_name'] ?? '',
+      dueDate: json['due_date'] ?? '',
+      assignedDate: json['assigned_date'] ?? '',
+      attachment: json['attachment'],
     );
   }
 
@@ -46,19 +49,25 @@ class Assignment {
       'id': id,
       'title': title,
       'description': description,
-      'class_id': classId,
+      'class_assigned': classId,
       'class_name': className,
-      'subject': subject,
-      'teacher_id': teacherId,
+      'subject': subjectId,
+      'subject_name': subjectName,
+      'teacher': teacherId,
       'teacher_name': teacherName,
       'due_date': dueDate,
       'assigned_date': assignedDate,
-      'attachments': attachments,
+      'attachment': attachment,
     };
   }
 
   bool get isOverdue {
-    final due = DateTime.parse(dueDate);
-    return DateTime.now().isAfter(due);
+    if (dueDate.isEmpty) return false;
+    try {
+      final due = DateTime.parse(dueDate);
+      return DateTime.now().isAfter(due);
+    } catch (e) {
+      return false;
+    }
   }
 }

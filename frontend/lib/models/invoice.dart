@@ -1,55 +1,55 @@
 class Invoice {
-  final String id;
-  final String studentId;
+  final int id;
+  final int studentId;
   final String studentName;
-  final String className;
-  final String description;
-  final double amount;
+  final String invoiceNumber;
+  final String invoiceDate;
   final String dueDate;
-  final String status; // paid, pending, overdue
-  final String issuedDate;
-  final String? paidDate;
+  final double totalAmount;
+  final double paidAmount;
+  final String status;
+  final String? remarks;
 
   Invoice({
     required this.id,
     required this.studentId,
     required this.studentName,
-    required this.className,
-    required this.description,
-    required this.amount,
+    required this.invoiceNumber,
+    required this.invoiceDate,
     required this.dueDate,
+    required this.totalAmount,
+    required this.paidAmount,
     required this.status,
-    required this.issuedDate,
-    this.paidDate,
+    this.remarks,
   });
 
   factory Invoice.fromJson(Map<String, dynamic> json) {
     return Invoice(
-      id: json['id'] as String,
-      studentId: json['student_id'] as String,
-      studentName: json['student_name'] as String,
-      className: json['class_name'] as String,
-      description: json['description'] as String,
-      amount: (json['amount'] as num).toDouble(),
-      dueDate: json['due_date'] as String,
-      status: json['status'] as String,
-      issuedDate: json['issued_date'] as String,
-      paidDate: json['paid_date'] as String?,
+      id: json['id'],
+      studentId: json['student'] ?? 0,
+      studentName: json['student_name'] ?? '',
+      invoiceNumber: json['invoice_number'] ?? '',
+      invoiceDate: json['invoice_date'] ?? '',
+      dueDate: json['due_date'] ?? '',
+      totalAmount: (json['total_amount'] as num?)?.toDouble() ?? 0.0,
+      paidAmount: (json['paid_amount'] as num?)?.toDouble() ?? 0.0,
+      status: json['status'] ?? 'pending',
+      remarks: json['remarks'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'student_id': studentId,
+      'student': studentId,
       'student_name': studentName,
-      'class_name': className,
-      'description': description,
-      'amount': amount,
+      'invoice_number': invoiceNumber,
+      'invoice_date': invoiceDate,
       'due_date': dueDate,
+      'total_amount': totalAmount,
+      'paid_amount': paidAmount,
       'status': status,
-      'issued_date': issuedDate,
-      'paid_date': paidDate,
+      'remarks': remarks,
     };
   }
 

@@ -1,16 +1,16 @@
 class Student {
-  final String id;
+  final int id;
   final String firstName;
   final String lastName;
   final String email;
   final String phone;
   final String dateOfBirth;
-  final String enrollmentDate;
+  final String admissionDate;
   final String className;
-  final String parentId;
+  final String? parentPhone;
   final String address;
   final String gender;
-  final String profileImageUrl;
+  final String? profileImageUrl;
 
   Student({
     required this.id,
@@ -19,28 +19,28 @@ class Student {
     required this.email,
     required this.phone,
     required this.dateOfBirth,
-    required this.enrollmentDate,
+    required this.admissionDate,
     required this.className,
-    required this.parentId,
+    this.parentPhone,
     required this.address,
     required this.gender,
-    required this.profileImageUrl,
+    this.profileImageUrl,
   });
 
   factory Student.fromJson(Map<String, dynamic> json) {
     return Student(
-      id: json['id'] as String,
-      firstName: json['first_name'] as String,
-      lastName: json['last_name'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-      dateOfBirth: json['date_of_birth'] as String,
-      enrollmentDate: json['enrollment_date'] as String,
-      className: json['class_name'] as String,
-      parentId: json['parent_id'] as String,
-      address: json['address'] as String,
-      gender: json['gender'] as String,
-      profileImageUrl: json['profile_image_url'] as String,
+      id: json['id'],
+      firstName: json['first_name'] ?? '',
+      lastName: json['last_name'] ?? '',
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
+      dateOfBirth: json['date_of_birth'] ?? '',
+      admissionDate: json['admission_date'] ?? '',
+      className: json['current_class_name'] ?? '',
+      parentPhone: json['parent_phone'],
+      address: json['address'] ?? '',
+      gender: json['gender'] ?? '',
+      profileImageUrl: null, // Not provided in StudentSerializer
     );
   }
 
@@ -52,9 +52,9 @@ class Student {
       'email': email,
       'phone': phone,
       'date_of_birth': dateOfBirth,
-      'enrollment_date': enrollmentDate,
-      'class_name': className,
-      'parent_id': parentId,
+      'admission_date': admissionDate,
+      'current_class_name': className,
+      'parent_phone': parentPhone,
       'address': address,
       'gender': gender,
       'profile_image_url': profileImageUrl,
